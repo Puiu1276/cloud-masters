@@ -1,0 +1,86 @@
+[
+  {
+    "livrare_id": 1,
+    "pachet_id": 101,
+    "status": "In curs",
+    "destinatar": "Ion Popescu",
+    "sofer_id": 501,
+    "data_descarcare": "2025-04-01",
+    "ora_descarcare": "10:30"
+  },
+  {
+    "livrare_id": 2,
+    "pachet_id": 102,
+    "status": "Livrat",
+    "destinatar": "Maria Ionescu",
+    "sofer_id": 502,
+    "data_descarcare": "2025-04-02",
+    "ora_descarcare": "13:15"
+  },
+  {
+    "livrare_id": 3,
+    "pachet_id": 103,
+    "status": "Returnat",
+    "destinatar": "Dan Georgescu",
+    "sofer_id": 503,
+    "data_descarcare": "2025-04-03",
+    "ora_descarcare": "15:45"
+  },
+  {
+    "livrare_id": 4,
+    "pachet_id": 104,
+    "status": "In curs",
+    "destinatar": "Elena Toma",
+    "sofer_id": 504,
+    "data_descarcare": "2025-04-04",
+    "ora_descarcare": "09:00"
+  },
+  {
+    "livrare_id": 5,
+    "pachet_id": 105,
+    "status": "Anulat",
+    "destinatar": "George Mihai",
+    "sofer_id": 505,
+    "data_descarcare": "2025-04-05",
+    "ora_descarcare": "11:10"
+  }
+]
+
+
+
+
+[
+  {
+    "depozit_colete_nep_id": 1,
+    "locatie": "Depozit Vest",
+    "capacitate": 100,
+    "data_inregistrare_colet": "2025-04-01",
+    "nr_incercare": 1,
+    "pachet_id": 102,
+    "sofer_id": 501
+  },
+  {
+    "depozit_colete_nep_id": 2,
+    "locatie": "Depozit Nord",
+    "capacitate": 80,
+    "data_inregistrare_colet": "2025-04-02",
+    "nr_incercare": 2,
+    "pachet_id": 104,
+    "sofer_id": 503
+  }
+]
+
+[
+  { "pachet_id": 101, "transporturi_id": 301 },
+  { "pachet_id": 102, "transporturi_id": 302 },
+  { "pachet_id": 103, "transporturi_id": 303 },
+  { "pachet_id": 104, "transporturi_id": 304 }
+]
+
+
+[
+  { "pachet_id": 101, "client_id": 201, "sofer_id": 501, "livrare_id": 1 },
+  { "pachet_id": 102, "client_id": 202, "sofer_id": 502, "livrare_id": 2 },
+  { "pachet_id": 103, "client_id": 203, "sofer_id": 503, "livrare_id": 3 },
+  { "pachet_id": 104, "client_id": 204, "sofer_id": 504, "livrare_id": 4 }
+]
