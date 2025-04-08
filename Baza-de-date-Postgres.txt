@@ -1,0 +1,164 @@
+-- Ștergere dacă există deja (evită conflicte)
+DROP TABLE IF EXISTS PachetServiciuCurierat CASCADE;
+DROP TABLE IF EXISTS ServiciuCurierat CASCADE;
+DROP TABLE IF EXISTS Curier CASCADE;
+DROP TABLE IF EXISTS Comanda CASCADE;
+DROP TABLE IF EXISTS Client CASCADE;
+DROP TABLE IF EXISTS Pachet CASCADE;
+
+-- Tabel Pachet (central)
+CREATE TABLE Pachet (
+    pachet_id SERIAL PRIMARY KEY,
+    descriere TEXT,
+    greutate DECIMAL(5, 2),
+    dimensiuni VARCHAR(50)
+);
+
+-- Tabel Client (legat de Pachet)
+CREATE TABLE Client (
+    client_id SERIAL PRIMARY KEY,
+    denumire_client VARCHAR(50),
+    persoana_fizica BOOLEAN,
+    adresa VARCHAR(50),
+    localitate VARCHAR (30),
+    oras VARCHAR (30),
+    judet VARCHAR (30),
+    tara VARCHAR (40),
+    telefon VARCHAR(15),
+    email VARCHAR(40),
+    pachet_id INT,
+    FOREIGN KEY (pachet_id) REFERENCES Pachet(pachet_id)
+);
+
+-- Tabel Comanda (legat de Client)
+CREATE TABLE Comanda (
+    comanda_id SERIAL PRIMARY KEY,
+    data_plasarii DATE,
+    adresa_livrare VARCHAR(50),
+    status VARCHAR(50),
+    cost_total DECIMAL(10, 2),
+    client_id INT,
+    FOREIGN KEY (client_id) REFERENCES Client(client_id)
+);
+
+-- Tabel Curier
+CREATE TABLE Curier (
+    curier_id SERIAL PRIMARY KEY,
+    denumire_curier VARCHAR(25),
+    vehicul_livrare VARCHAR(25),
+    disponibilitate BOOLEAN
+);
+
+-- Tabel ServiciuCurierat (legat de Curier)
+CREATE TABLE ServiciuCurierat (
+    serviciu_id SERIAL PRIMARY KEY,
+    curier_id INT,
+    denumire_serviciu_curierat VARCHAR(50),
+    descriere TEXT,
+    FOREIGN KEY (curier_id) REFERENCES Curier(curier_id)
+);
+
+-- Tabel de legătură Pachet–ServiciuCurierat (M:N)
+CREATE TABLE PachetServiciuCurierat (
+    pachet_id INT,
+    serviciu_id INT,
+    PRIMARY KEY (pachet_id, serviciu_id),
+    FOREIGN KEY (pachet_id) REFERENCES Pachet(pachet_id),
+    FOREIGN KEY (serviciu_id) REFERENCES ServiciuCurierat(serviciu_id)
+);
+---------------------------------------------------------------------------
+-- Pachet (10 înregistrări)
+INSERT INTO Pachet (descriere, greutate, dimensiuni) VALUES
+('Laptop Dell XPS', 2.5, '30x20x5'),
+('Telefon Samsung', 0.5, '15x7x1'),
+('Carti', 3.0, '40x30x10'),
+('Imprimanta HP', 7.2, '50x40x20'),
+('TV LG 32"', 8.5, '80x50x10'),
+('Bicicleta pliabila', 12.0, '120x60x20'),
+('Jucarii copii', 1.2, '25x25x25'),
+('Haine sezon', 4.3, '60x40x20'),
+('Mobilier mic', 15.5, '100x80x40'),
+('Electrocasnice', 5.7, '45x35x25');
+
+-- Client (10 înregistrări)
+INSERT INTO Client (denumire_client, persoana_fizica, adresa, localitate, oras, judet, tara, telefon, email, pachet_id) VALUES
+('Ana Popescu', TRUE, 'Str. Florilor 12', 'Cluj-Napoca', 'Cluj', 'Cluj', 'Romania', '0712345678', 'ana.popescu@gmail.com', 1),
+('Ion Ionescu', TRUE, 'Bd. Unirii 45', 'Bucuresti', 'Bucuresti', 'Bucuresti', 'Romania', '0722233445', 'ion@yahoo.com', 2),
+('SC Tech SRL', FALSE, 'Str. Industriilor 7', 'Timisoara', 'Timis', 'Timis', 'Romania', '0356432123', 'contact@techsrl.ro', 3),
+('Maria Vasilescu', TRUE, 'Aleea Verde 5', 'Iasi', 'Iasi', 'Iasi', 'Romania', '0733445566', 'maria@outlook.com', 4),
+('George Petrescu', TRUE, 'Str. Libertatii 9', 'Brasov', 'Brasov', 'Brasov', 'Romania', '0744556677', 'georgep@gmail.com', 5),
+('Laura Georgescu', TRUE, 'Str. Zambilelor 6', 'Constanta', 'Constanta', 'Constanta', 'Romania', '0766778899', 'laura@yahoo.com', 6),
+('SC ComenziRapide SRL', FALSE, 'Calea Victoriei 11', 'Bucuresti', 'Bucuresti', 'Bucuresti', 'Romania', '0312345678', 'office@comenzirapide.ro', 7),
+('Bogdan Mihai', TRUE, 'Str. Nucilor 33', 'Ploiesti', 'Prahova', 'Prahova', 'Romania', '0755667788', 'bogdan@yahoo.com', 8),
+('Elena Tudor', TRUE, 'Bd. Independentei 88', 'Oradea', 'Bihor', 'Bihor', 'Romania', '0777888999', 'elena.tudor@gmail.com', 9),
+('SC TransportExpress SA', FALSE, 'Str. Garii 100', 'Cluj-Napoca', 'Cluj', 'Cluj', 'Romania', '0364123456', 'info@transportexpress.ro', 10);
+
+-- Comanda (10 înregistrări)
+INSERT INTO Comanda (data_plasarii, adresa_livrare, status, cost_total, client_id) VALUES
+('2025-03-01', 'Str. Florilor 12', 'Plasata', 250.50, 1),
+('2025-03-02', 'Bd. Unirii 45', 'In procesare', 150.00, 2),
+('2025-03-03', 'Str. Industriilor 7', 'Livrata', 370.75, 3),
+('2025-03-04', 'Aleea Verde 5', 'Anulata', 100.00, 4),
+('2025-03-05', 'Str. Libertatii 9', 'Plasata', 225.00, 5),
+('2025-03-06', 'Str. Zambilelor 6', 'Livrata', 85.50, 6),
+('2025-03-07', 'Calea Victoriei 11', 'Plasata', 900.00, 7),
+('2025-03-08', 'Str. Nucilor 33', 'In procesare', 300.00, 8),
+('2025-03-09', 'Bd. Independentei 88', 'Livrata', 400.00, 9),
+('2025-03-10', 'Str. Garii 100', 'Plasata', 1200.00, 10);
+
+-- Curier (10 înregistrări)
+INSERT INTO Curier (denumire_curier, vehicul_livrare, disponibilitate) VALUES
+('CurierRapido', 'Duba', TRUE),
+('ExpressDelivery', 'Motocicleta', TRUE),
+('MegaCourier', 'Camioneta', FALSE),
+('QuickShip', 'Masina', TRUE),
+('FastTrack', 'Duba', TRUE),
+('EcoCourier', 'Bicicleta', TRUE),
+('RapidExpress', 'Motocicleta', FALSE),
+('UrbanDelivery', 'Masina', TRUE),
+('NextDay', 'Camioneta', TRUE),
+('SameDayCourier', 'Duba', TRUE);
+
+-- ServiciuCurierat (10 înregistrări, legate de Curier)
+INSERT INTO ServiciuCurierat (curier_id, denumire_serviciu_curierat, descriere) VALUES
+(1, 'Livrare standard', '24-48h livrare'),
+(2, 'Livrare express', 'Sub 24h livrare'),
+(3, 'Livrare nocturna', 'Livrare in timpul noptii'),
+(4, 'Livrare weekend', 'Livrari in weekend'),
+(5, 'Livrare programata', 'Livrare la ora exacta'),
+(6, 'Livrare eco', 'Cu bicicleta in oras'),
+(7, 'Livrare internationala', 'Livrari externe'),
+(8, 'Livrare rapida', 'Sub 12h in oras'),
+(9, 'Livrare flexibila', 'Orar ales de client'),
+(10, 'Livrare premium', 'Prioritate maxima');
+
+-- PachetServiciuCurierat (10 asocieri M:N)
+INSERT INTO PachetServiciuCurierat (pachet_id, serviciu_id) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 6),
+(7, 7),
+(8, 8),
+(9, 9),
+(10,10);
+------------------------------------------------------------------------
+CREATE VIEW v_pachet AS
+SELECT * FROM Pachet;
+
+CREATE VIEW v_client AS
+SELECT * FROM Client;
+
+CREATE VIEW v_comanda AS
+SELECT * FROM Comanda;
+
+CREATE VIEW v_curier AS
+SELECT * FROM Curier;
+
+CREATE VIEW v_serviciu_curierat AS
+SELECT * FROM ServiciuCurierat;
+
+CREATE VIEW v_pachet_serviciu_curierat AS
+SELECT * FROM PachetServiciuCurierat;
